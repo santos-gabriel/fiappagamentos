@@ -9,7 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IPedidoRepositoryPort {
-    Pedido atualizar(Pedido pedido);
-    Pedido atualizarStatus(StatusPedido status, UUID idPedido) throws PedidoNaoEncontradoException;
-    Optional<Pedido> buscarPorId(UUID idPedido);
+    // Pedido atualizar(Pedido pedido);
+    // Pedido atualizarStatus(StatusPedido status, UUID idPedido) throws
+    // PedidoNaoEncontradoException;
+    // Optional<Pedido> buscarPorId(UUID idPedido);
 }

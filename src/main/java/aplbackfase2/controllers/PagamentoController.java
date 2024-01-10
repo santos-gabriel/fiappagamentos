@@ -25,8 +25,11 @@ public class PagamentoController {
     public ResponseEntity<?> realizaPagamento(@PathVariable(name = "idPedido") UUID idPedido) {
         if (Objects.nonNull(idPedido)) {
             boolean res = pagamentoUseCase.realizarPagamento(idPedido);
-            // TODO - Colocar o pedido na fila com status RECEBIDO
-            return res ? ResponseEntity.ok("Pagamento realizado com sucesso!") : ResponseEntity.internalServerError().build();
+
+            // Atualizar status do pedido
+
+            return res ? ResponseEntity.ok("Pagamento realizado com sucesso!")
+                    : ResponseEntity.internalServerError().build();
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -35,15 +38,18 @@ public class PagamentoController {
     @GetMapping("/pagamento/{idPedido}")
     public ResponseEntity<?> localizarPagamentoDoPedido(@PathVariable(name = "idPedido") UUID idPedido) {
         if (Objects.nonNull(idPedido)) {
-            return ResponseEntity.ok(new PagamentoDTO(pagamentoUseCase.localizarStatusPagamento(idPedido, pedidoUseCasePort)));
+            return ResponseEntity
+                    .ok(new PagamentoDTO(pagamentoUseCase.localizarStatusPagamento(idPedido, pedidoUseCasePort)));
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping("/pagamento/webhook")
-    public ResponseEntity<?> localizarPagamentoDoPedido(@RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
-        if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados()) || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
+    public ResponseEntity<?> localizarPagamentoDoPedido(
+            @RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
+        if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados())
+                || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
             return ResponseEntity.badRequest().build();
         }
         if (Objects.isNull(pagamentoNotificacaoRequest.getAcao()) || pagamentoNotificacaoRequest.getAcao().isEmpty()) {
@@ -51,11 +57,13 @@ public class PagamentoController {
         }
 
         if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.aprovado")) {
-            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.APROVADO, pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
+            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.APROVADO,
+                    pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
         }
 
         if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.recusado")) {
-            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.RECUSADO, pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
+            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.RECUSADO,
+                    pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
         }
 
         return ResponseEntity.ok().build();

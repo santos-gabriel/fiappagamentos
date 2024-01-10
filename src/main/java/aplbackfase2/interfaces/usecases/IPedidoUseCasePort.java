@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public interface IPedidoUseCasePort {
     Pedido atualizarStatus(StatusPedido status, UUID idPedido) throws PedidoNaoEncontradoException;
-    Pedido atualizarStatusPagamento(StatusPagamento status, UUID idPedido) throws PedidoNaoEncontradoException;
-    Optional<Pedido> buscarPorId(UUID idPedido);
+
+    // Pedido atualizarStatusPagamento(StatusPagamento status, UUID idPedido) throws
+    // PedidoNaoEncontradoException;
 }

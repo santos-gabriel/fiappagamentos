@@ -1,18 +1,20 @@
 package aplbackfase2.entities;
 
+
+import aplbackfase2.utils.enums.StatusPagamento;
 import lombok.*;
 
 import java.util.UUID;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Builder
-public final class Cliente {
+public class Pagamento {
     private UUID id;
-    private Nome nome;
-    private Cpf cpf;
-    private Email email;
+    private UUID idPedido;
+    private StatusPagamento statusPagamento;
 }

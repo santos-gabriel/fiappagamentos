@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 public class PagamentoDTO {
+    private UUID pedido;
     private StatusPagamento status;
     private String menssagem;
 

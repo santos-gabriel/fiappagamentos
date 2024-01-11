@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import aplbackfase2.entities.Pedido;
 import aplbackfase2.exceptions.entities.PedidoNaoEncontradoException;
 import aplbackfase2.interfaces.gateways.IPedidoHttpPort;
 import aplbackfase2.utils.enums.StatusPedido;

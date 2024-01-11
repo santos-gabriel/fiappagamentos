@@ -3,7 +3,7 @@ package aplbackfase2.controllers;
 import aplbackfase2.utils.enums.StatusPagamento;
 import aplbackfase2.adapters.PagamentoDTO;
 import aplbackfase2.controllers.requestValidations.PagamentoNotificacaoRequest;
-import aplbackfase2.interfaces.usecases.IPagamentoUseCase;
+import aplbackfase2.interfaces.usecases.IPagamentoUseCasePort;
 import aplbackfase2.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PagamentoController {
 
-    private final IPagamentoUseCase pagamentoUseCase;
+    private final IPagamentoUseCasePort pagamentoUseCase;
     private final IPedidoUseCasePort pedidoUseCasePort;
 
     @PostMapping("/pagamento/{idPedido}")

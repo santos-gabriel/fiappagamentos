@@ -1,7 +1,8 @@
 package aplbackfase2.facade;
 
-import aplbackfase2.interfaces.gateways.IPedidoRepositoryPort;
-import aplbackfase2.interfaces.usecases.IPagamentoUseCase;
+import aplbackfase2.interfaces.gateways.IPagamentoRepositoryPort;
+import aplbackfase2.interfaces.gateways.IPedidoHttpPort;
+import aplbackfase2.interfaces.usecases.IPagamentoUseCasePort;
 import aplbackfase2.interfaces.usecases.IPedidoUseCasePort;
 import aplbackfase2.usecases.*;
 
@@ -12,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigurationContext {
 
     @Bean
-    public IPagamentoUseCase pagamentoUseCase() {
-        return new PagamentoUseCaseImpl();
+    public IPagamentoUseCasePort pagamentoUseCase(IPagamentoRepositoryPort pagamentoRepositoryPort) {
+        return new PagamentoUseCaseImpl(pagamentoRepositoryPort);
     }
 
     @Bean
-    public IPedidoUseCasePort pedidoUseCasePort(IPedidoRepositoryPort pedidoRepositoryPort) {
-        return new PedidoUseCaseImpl(pedidoRepositoryPort);
+    public IPedidoUseCasePort pedidoUseCasePort(IPedidoHttpPort pedidoHttpPort) {
+        return new PedidoUseCaseImpl(pedidoHttpPort);
     }
 
 }

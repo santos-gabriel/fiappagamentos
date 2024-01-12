@@ -8,10 +8,10 @@
 		<version>2.7.13-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>apl-back-fase1</groupId>
-	<artifactId>apl-back-fase1</artifactId>
+	<groupId>fiappagamentos</groupId>
+	<artifactId>fiappagamentos</artifactId>
 	<version>1.0.0</version>
-	<name>apl-back-fase1</name>
+	<name>fiappagamentos</name>
 	<description>FIAP SOAT2 G58</description>
 	<properties>
 		<java.version>11</java.version>

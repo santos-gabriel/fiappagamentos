@@ -1,15 +1,15 @@
 <br />
 <div align="center">
 
-  <h3 align="center">apl-back-fase1</h3>
+  <h3 align="center">fiappagamentos</h3>
 
   <p align="center">
     Application created for the challenge 1 in software architeture graduation.
     <br />
     <br />
-    <a href="https://github.com/SOAT2G58/apl-back-fase1/issues">Report Bug</a>
+    <a href="https://github.com/santos-gabriel/fiappagamentos/issues">Report Bug</a>
     ·
-    <a href="https://github.com/SOAT2G58/apl-back-fase1/issues">Request Feature</a>
+    <a href="https://github.com/santos-gabriel/fiappagamentos/issues">Request Feature</a>
   </p>
 </div>
 

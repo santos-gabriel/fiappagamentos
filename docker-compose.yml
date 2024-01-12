@@ -10,7 +10,7 @@ services:
     ports:
       - $POSTGRES_LOCAL_PORT:$POSTGRES_DOCKER_PORT
     networks:
-      - apl-back-fase1_default
+      - fiappagamentos_default
 
   app:
     depends_on:
@@ -30,14 +30,15 @@ services:
         "spring.datasource.initialize" : true,
         "spring.datasource.continue-on-error": true,
         "spring.jpa.hibernate.ddl-auto":"update",
-        "server.port" : "$SPRING_LOCAL_PORT"
+        "server.port" : "$SPRING_LOCAL_PORT",
+        "pedido.service.url": "$PEDIDO_SERVICE_URL"
       }'
     volumes:
       - .m2:/root/.m2
     stdin_open: true
     tty: true
     networks:
-      - apl-back-fase1_default
+      - fiappagamentos_default
 
   phppgadmin:
     image: dpage/pgadmin4
@@ -49,8 +50,8 @@ services:
     ports:
       - "8080:80"
     networks:
-      - apl-back-fase1_default
+      - fiappagamentos_default
 
 networks:
-  apl-back-fase1_default:
+  fiappagamentos_default:
     driver: bridge

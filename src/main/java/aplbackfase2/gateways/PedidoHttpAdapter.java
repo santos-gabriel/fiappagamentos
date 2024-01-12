@@ -3,12 +3,14 @@ package aplbackfase2.gateways;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import aplbackfase2.exceptions.entities.PedidoNaoEncontradoException;
 import aplbackfase2.interfaces.gateways.IPedidoHttpPort;
-import aplbackfase2.utils.enums.StatusPedido;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -16,18 +18,19 @@ import lombok.RequiredArgsConstructor;
 public class PedidoHttpAdapter implements IPedidoHttpPort {
 
     private final RestTemplate restTemplate;
+
     @Value("${pedido.service.url}")
-    private final String urlServicePedido;
+    private String urlServicePedido;
 
     @Override
-    public Pedido atualizarStatus(StatusPedido statusPedido, UUID idPedido) throws PedidoNaoEncontradoException {
-
+    public boolean atualizarStatus(UUID idPedido) throws PedidoNaoEncontradoException {
         StringBuilder urlRequsicao = new StringBuilder();
+        urlRequsicao.append(urlServicePedido);
         urlRequsicao.append("/" + idPedido);
-        urlRequsicao.append("/status/" + statusPedido.toString());
+        urlRequsicao.append("/webhook");
 
-        restTemplate.put(urlRequsicao.toString(), null);
-
+        var response = restTemplate.exchange(urlRequsicao.toString(), HttpMethod.PUT, HttpEntity.EMPTY, String.class);
+        return response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NO_CONTENT;
     }
 
 }

@@ -17,4 +17,13 @@ public class Pagamento {
     private UUID id;
     private UUID idPedido;
     private StatusPagamento statusPagamento;
+
+    public void aprovarPagamento() {
+        this.statusPagamento = StatusPagamento.APROVADO;
+    }
+
+    public void recusarPagamento() {
+        this.statusPagamento = StatusPagamento.RECUSADO;
+    }
+
 }

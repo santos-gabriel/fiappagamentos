@@ -1,5 +1,6 @@
 package aplbackfase2.controllers;
 
+import aplbackfase2.entities.Pagamento;
 import aplbackfase2.utils.enums.StatusPagamento;
 import aplbackfase2.adapters.PagamentoDTO;
 import aplbackfase2.controllers.requestValidations.PagamentoNotificacaoRequest;
@@ -11,42 +12,47 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tech-challenge")
+@RequestMapping
 @RequiredArgsConstructor
 public class PagamentoController {
 
     private final IPagamentoUseCasePort pagamentoUseCase;
     private final IPedidoUseCasePort pedidoUseCasePort;
 
-    @PostMapping("/pagamento/{idPedido}")
+    @PostMapping("/{idPedido}")
     public ResponseEntity<?> realizaPagamento(@PathVariable(name = "idPedido") UUID idPedido) {
-        if (Objects.nonNull(idPedido)) {
-            boolean res = pagamentoUseCase.realizarPagamento(idPedido);
-
-            // Atualizar status do pedido
-
-            return res ? ResponseEntity.ok("Pagamento realizado com sucesso!")
-                    : ResponseEntity.internalServerError().build();
-        } else {
+        if (Objects.isNull(idPedido)) {
             return ResponseEntity.badRequest().build();
         }
+
+        Pagamento res = pagamentoUseCase.realizarPagamento(idPedido, pedidoUseCasePort);
+
+        if (Objects.isNull(res)) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        return ResponseEntity.ok(new PagamentoDTO(res));
     }
 
-    @GetMapping("/pagamento/{idPedido}")
+    @GetMapping("/{idPedido}")
     public ResponseEntity<?> localizarPagamentoDoPedido(@PathVariable(name = "idPedido") UUID idPedido) {
-        if (Objects.nonNull(idPedido)) {
-            return ResponseEntity
-                    .ok(new PagamentoDTO(pagamentoUseCase.localizarStatusPagamento(idPedido, pedidoUseCasePort)));
-        } else {
+        if (Objects.isNull(idPedido))
             return ResponseEntity.badRequest().build();
-        }
+
+        Optional<Pagamento> pagamento = pagamentoUseCase.localizarPorPedido(idPedido);
+        if (pagamento.isEmpty())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity
+                .ok(new PagamentoDTO(pagamento.get()));
     }
 
-    @PostMapping("/pagamento/webhook")
-    public ResponseEntity<?> localizarPagamentoDoPedido(
+    @PostMapping("/webhook")
+    public ResponseEntity<?> webhook(
             @RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
         if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados())
                 || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
@@ -57,13 +63,11 @@ public class PagamentoController {
         }
 
         if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.aprovado")) {
-            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.APROVADO,
-                    pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
+            pagamentoUseCase.realizarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido(), pedidoUseCasePort);
         }
 
         if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.recusado")) {
-            pedidoUseCasePort.atualizarStatusPagamento(StatusPagamento.RECUSADO,
-                    pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
+            pagamentoUseCase.recuzarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
         }
 
         return ResponseEntity.ok().build();

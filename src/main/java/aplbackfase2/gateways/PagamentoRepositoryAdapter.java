@@ -27,6 +27,6 @@ public class PagamentoRepositoryAdapter implements IPagamentoRepositoryPort {
 
     @Override
     public Optional<Pagamento> localizarPorPedido(UUID idPedido) {
-        return this.pagamentoRepository.findAllByIdPedido(idPedido);
+        return this.pagamentoRepository.findAllByIdPedido(idPedido).map(e -> e.to());
     }
 }

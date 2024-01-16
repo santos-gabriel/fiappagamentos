@@ -6,26 +6,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "pagamentos")
+@Document("pagamentos")
 public class PagamentoEntity {
     @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private UUID id;
+//    @GeneratedValue
+//    @Column(name = "id")
+    private String id;
 
     private UUID idPedido;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     @NotNull
     private StatusPagamento status;
 

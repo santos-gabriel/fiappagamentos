@@ -14,7 +14,7 @@ import java.util.UUID;
 @ToString
 @Builder
 public class Pagamento {
-    private UUID id;
+    private String id;
     private UUID idPedido;
     private StatusPagamento statusPagamento;
 

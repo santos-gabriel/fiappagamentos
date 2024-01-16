@@ -50,25 +50,25 @@ public class PagamentoController {
                 .ok(new PagamentoDTO(pagamento.get()));
     }
 
-    @PostMapping("/webhook")
-    public ResponseEntity<?> webhook(
-            @RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
-        if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados())
-                || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
-            return ResponseEntity.badRequest().build();
-        }
-        if (Objects.isNull(pagamentoNotificacaoRequest.getAcao()) || pagamentoNotificacaoRequest.getAcao().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.aprovado")) {
-            pagamentoUseCase.realizarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido(), pedidoUseCasePort);
-        }
-
-        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.recusado")) {
-            pagamentoUseCase.recuzarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/webhook")
+//    public ResponseEntity<?> webhook(
+//            @RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
+//        if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados())
+//                || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        if (Objects.isNull(pagamentoNotificacaoRequest.getAcao()) || pagamentoNotificacaoRequest.getAcao().isEmpty()) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.aprovado")) {
+//            pagamentoUseCase.realizarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido(), pedidoUseCasePort);
+//        }
+//
+//        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.recusado")) {
+//            pagamentoUseCase.recuzarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 }

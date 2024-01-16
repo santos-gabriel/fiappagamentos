@@ -8,16 +8,15 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
-public class AplBackFase2Application {
+public class FiapPagamentosApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AplBackFase2Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FiapPagamentosApplication.class, args);
+    }
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void runAfterStartup() {
-		System.out.println("Application started");
-	}
-
+    @EventListener(ApplicationReadyEvent.class)
+    public void runAfterStartup() {
+        System.out.println("Application started");
+    }
 
 }

@@ -1,6 +1,5 @@
 package fiappagamentos.usecases;
 
-
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
 import fiappagamentos.utils.enums.StatusPagamento;
@@ -19,7 +18,8 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
     private final IPagamentoRepositoryPort pagamentoRepositoryPort;
 
     @Override
-    public Pagamento realizarPagamento(UUID idPedido, IPedidoUseCasePort pedidoUseCasePort) throws PedidoInvalidoException {
+    public Pagamento realizarPagamento(UUID idPedido, IPedidoUseCasePort pedidoUseCasePort)
+            throws PedidoInvalidoException {
         if (Objects.isNull(idPedido)) {
             throw new PedidoInvalidoException();
         }
@@ -53,7 +53,8 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
             return pagamento;
         }
 
-        Pagamento pagamento = pagamentoRepositoryPort.atualizar(new Pagamento(null, idPedido, StatusPagamento.RECUSADO));
+        Pagamento pagamento = pagamentoRepositoryPort
+                .atualizar(new Pagamento(null, idPedido, StatusPagamento.RECUSADO));
         return pagamento;
     }
 

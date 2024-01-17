@@ -1,8 +1,11 @@
 package fiappagamentos.usecases;
 
 import fiappagamentos.entities.Pagamento;
+import fiappagamentos.exceptions.entities.PedidoInvalidoException;
+import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import fiappagamentos.util.PagamentoHelper;
+import fiappagamentos.utils.enums.StatusPagamento;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -17,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,25 +55,64 @@ class PagamentoUseCaseImplTest {
         @Severity(SeverityLevel.CRITICAL)
         @Description("Realizar um pagamento quando localizar id do pedido")
         void deveRealizarPagamento_IdPedidoLocalizado() {
-            fail("Teste não implementado");
+            var pagamento = gerarPagamento();
+            pagamento.setStatusPagamento(StatusPagamento.APROVADO);
+
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.of(pagamento));
+            when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
+
+            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), pedidoUseCasePort);
+
+            assertThat(pagamentoRealizado).isNotNull();
+            assertThat(pagamentoRealizado.getStatusPagamento()).isEqualTo(StatusPagamento.APROVADO);
+
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, times(1)).atualizar(any(Pagamento.class));
         }
+
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Realizar um pagamento quando nao localizar id do pedido")
         void deveRealizarPagamento_IdPedidoNaoLocalizado() {
-            fail("Teste não implementado");
+            var pagamento = gerarPagamento();
+            pagamento.setStatusPagamento(StatusPagamento.APROVADO);
+
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
+            when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
+
+            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), pedidoUseCasePort);
+
+            assertThat(pagamentoRealizado).isNotNull();
+            assertThat(pagamentoRealizado.getStatusPagamento()).isEqualTo(StatusPagamento.APROVADO);
+
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, times(1)).atualizar(any(Pagamento.class));
         }
+
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Gerar uma excecao ao realizar um pagamento quando o id do pedido for nulo")
         void deveGerarExcecao_QuandoRealizarPagamento_IdPedidoNulo() {
-            fail("Teste não implementado");
+            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(null, pedidoUseCasePort))
+                    .isInstanceOf(PedidoInvalidoException.class)
+                    .hasMessage("Pedido inválido");
+
+            verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, never()).atualizar(any(Pagamento.class));
+            verify(pedidoUseCasePort, never()).atualizarStatus(any(UUID.class));
         }
+
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Gerar uma excecao ao realizar um pagamento quando a dependencia de usecase para pedido nao for informada")
         void deveGerarExcecao_QuandoRealizarPagamento_PedidoUseCaseNulo() {
-            fail("Teste não implementado");
+            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(UUID.randomUUID(), null))
+                    .isInstanceOf(PedidoUseCaseInvalidoException.class)
+                    .hasMessage("Dependencia usecase de pedido invalida");
+
+            verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, never()).atualizar(any(Pagamento.class));
+            verify(pedidoUseCasePort, never()).atualizarStatus(any(UUID.class));
         }
     }
 
@@ -79,13 +122,48 @@ class PagamentoUseCaseImplTest {
         @Severity(SeverityLevel.CRITICAL)
         @Description("Recusar um pagamento quando o localizar o id do pedido")
         void deveRecusarPagamento_IdPedidoLocalizado() {
-            fail("Teste não implementado");
+            var pagamento = gerarPagamento();
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.of(pagamento));
+            when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
+
+            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID());
+
+            assertThat(pagamentoRecusado).isNotNull();
+            assertThat(pagamentoRecusado).isEqualTo(pagamento);
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, times(1)).atualizar(any(Pagamento.class));
         }
+
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Recusar um pagamento quando nao localizar o id do pedido")
         void deveRecusarPagamento_IdPedidoNaoLocalizado() {
-            fail("Teste não implementado");
+            var pagamento = gerarPagamento();
+            pagamento.setStatusPagamento(StatusPagamento.RECUSADO);
+
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
+            when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
+
+            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID());
+
+            assertThat(pagamentoRecusado).isNotNull();
+            assertThat(pagamentoRecusado.getStatusPagamento()).isEqualTo(StatusPagamento.RECUSADO);
+
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, times(1)).atualizar(any(Pagamento.class));
+        }
+
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Recusar um pagamento quando nao informar o id do pedido")
+        void deveRecusarPagamento_IdPedidoNaoInformado() {
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> pagamentoUseCase.recuzarPagamento(null))
+                    .isInstanceOf(PedidoInvalidoException.class).hasMessage("Pedido inválido");
+
+            verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));
+            verify(pagamentoRepositoryPort, never()).atualizar(any(Pagamento.class));
         }
     }
 
@@ -105,6 +183,7 @@ class PagamentoUseCaseImplTest {
             verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
 
         }
+
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Retornar optional vazio quando Localizar um pagamento e o id do pedido for nulo")

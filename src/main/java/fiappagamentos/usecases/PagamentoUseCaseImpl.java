@@ -4,6 +4,7 @@ import fiappagamentos.entities.Pagamento;
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
 import fiappagamentos.utils.enums.StatusPagamento;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
+import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,12 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
 
     @Override
     public Pagamento realizarPagamento(UUID idPedido, IPedidoUseCasePort pedidoUseCasePort)
-            throws PedidoInvalidoException {
+            throws PedidoInvalidoException, PedidoUseCaseInvalidoException {
         if (Objects.isNull(idPedido)) {
             throw new PedidoInvalidoException();
+        }
+        if (Objects.isNull(pedidoUseCasePort)) {
+            throw new PedidoUseCaseInvalidoException();
         }
         Optional<Pagamento> pagamentoDB = localizarPorPedido(idPedido);
         Pagamento pagamento = null;

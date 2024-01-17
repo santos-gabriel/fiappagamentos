@@ -2,14 +2,12 @@ package fiappagamentos.controllers;
 
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.adapters.PagamentoDTO;
-import fiappagamentos.controllers.requestValidations.PagamentoNotificacaoRequest;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;

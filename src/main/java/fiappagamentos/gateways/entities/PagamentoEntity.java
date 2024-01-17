@@ -2,6 +2,7 @@ package fiappagamentos.gateways.entities;
 
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.utils.enums.StatusPagamento;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
@@ -19,13 +19,10 @@ import java.util.UUID;
 @Document("pagamentos")
 public class PagamentoEntity {
     @Id
-//    @GeneratedValue
-//    @Column(name = "id")
     private String id;
 
     private UUID idPedido;
 
-//    @Enumerated(EnumType.STRING)
     @NotNull
     private StatusPagamento status;
 

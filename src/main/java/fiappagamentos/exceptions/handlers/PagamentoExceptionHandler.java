@@ -3,12 +3,11 @@ package fiappagamentos.exceptions.handlers;
 import fiappagamentos.controllers.PagamentoController;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoNaoEncontradoException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice(assignableTypes = {PagamentoController.class})
 public class PagamentoExceptionHandler {

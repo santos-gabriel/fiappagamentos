@@ -1,2 +1,0 @@
-# Comentado apenas para rodar em localhost para facilitar testes iniciais
-# org.springframework.context.ApplicationListener=fiappagamentos.facade.ListenerOfSecrets

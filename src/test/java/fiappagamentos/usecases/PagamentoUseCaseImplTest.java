@@ -1,12 +1,26 @@
 package fiappagamentos.usecases;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import fiappagamentos.entities.Pagamento;
+import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
+import fiappagamentos.util.PagamentoHelper;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static fiappagamentos.util.PagamentoHelper.gerarPagamento;
 
 class PagamentoUseCaseImplTest {
 
@@ -14,6 +28,9 @@ class PagamentoUseCaseImplTest {
 
     @Mock
     private IPagamentoRepositoryPort pagamentoRepositoryPort;
+
+    @Mock
+    private IPedidoUseCasePort pedidoUseCasePort;
 
     AutoCloseable mock;
 
@@ -26,6 +43,78 @@ class PagamentoUseCaseImplTest {
     @AfterEach
     void tearDown() throws Exception {
         mock.close();
+    }
+
+    @Nested
+    class RealizarPagamento {
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Realizar um pagamento quando localizar id do pedido")
+        void deveRealizarPagamento_IdPedidoLocalizado() {
+            fail("Teste não implementado");
+        }
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Realizar um pagamento quando nao localizar id do pedido")
+        void deveRealizarPagamento_IdPedidoNaoLocalizado() {
+            fail("Teste não implementado");
+        }
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Gerar uma excecao ao realizar um pagamento quando o id do pedido for nulo")
+        void deveGerarExcecao_QuandoRealizarPagamento_IdPedidoNulo() {
+            fail("Teste não implementado");
+        }
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Gerar uma excecao ao realizar um pagamento quando a dependencia de usecase para pedido nao for informada")
+        void deveGerarExcecao_QuandoRealizarPagamento_PedidoUseCaseNulo() {
+            fail("Teste não implementado");
+        }
+    }
+
+    @Nested
+    class RecusarPagamento {
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Recusar um pagamento quando o localizar o id do pedido")
+        void deveRecusarPagamento_IdPedidoLocalizado() {
+            fail("Teste não implementado");
+        }
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Recusar um pagamento quando nao localizar o id do pedido")
+        void deveRecusarPagamento_IdPedidoNaoLocalizado() {
+            fail("Teste não implementado");
+        }
+    }
+
+    @Nested
+    class LocalizarPagamento {
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Localizar um pagamento atravez do id do pedido")
+        void deveLocalizarPagamentoPorIdPedido() {
+            var pagamento = gerarPagamento();
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.of(pagamento));
+
+            var pagamentoLocalizado = pagamentoUseCase.localizarPorPedido(UUID.randomUUID());
+
+            assertThat(pagamentoLocalizado).isPresent();
+            assertThat(pagamentoLocalizado.get()).isEqualTo(pagamento);
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+
+        }
+        @Test
+        @Severity(SeverityLevel.CRITICAL)
+        @Description("Retornar optional vazio quando Localizar um pagamento e o id do pedido for nulo")
+        void deveRetornarOptionalVazio_QuandoLocalizarPagamentoPorIdPedido_IdPedidoNulo() {
+            when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
+
+            var pagamentoLocalizado = pagamentoUseCase.localizarPorPedido(UUID.randomUUID());
+            assertThat(pagamentoLocalizado).isEmpty();
+            verify(pagamentoRepositoryPort, times(1)).localizarPorPedido(any(UUID.class));
+        }
     }
 
 }

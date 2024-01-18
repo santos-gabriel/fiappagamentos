@@ -18,11 +18,6 @@ public class PagamentoDTO {
     private StatusPagamento status;
     private String menssagem;
 
-    public PagamentoDTO (StatusPagamento status) {
-        this.status = status;
-        this.menssagem = status.getDescricao();
-    }
-
     public PagamentoDTO(Pagamento pagamento) {
         this.pedido = pagamento.getIdPedido();
         this.status = pagamento.getStatusPagamento();

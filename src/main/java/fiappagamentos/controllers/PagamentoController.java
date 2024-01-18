@@ -21,11 +21,7 @@ public class PagamentoController {
     private final IPedidoUseCasePort pedidoUseCasePort;
 
     @PostMapping("/{idPedido}")
-    public ResponseEntity<?> realizaPagamento(@PathVariable(name = "idPedido") UUID idPedido) {
-        if (Objects.isNull(idPedido)) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> realizaPagamento(@PathVariable(name = "idPedido", required = true) UUID idPedido) {
         Pagamento res = pagamentoUseCase.realizarPagamento(idPedido, pedidoUseCasePort);
 
         if (Objects.isNull(res)) {
@@ -36,10 +32,7 @@ public class PagamentoController {
     }
 
     @GetMapping("/{idPedido}")
-    public ResponseEntity<?> localizarPagamentoDoPedido(@PathVariable(name = "idPedido") UUID idPedido) {
-        if (Objects.isNull(idPedido))
-            return ResponseEntity.badRequest().build();
-
+    public ResponseEntity<?> localizarPagamentoDoPedido(@PathVariable(name = "idPedido", required = true) UUID idPedido) {
         Optional<Pagamento> pagamento = pagamentoUseCase.localizarPorPedido(idPedido);
         if (pagamento.isEmpty())
             return ResponseEntity.notFound().build();
@@ -48,25 +41,4 @@ public class PagamentoController {
                 .ok(new PagamentoDTO(pagamento.get()));
     }
 
-//    @PostMapping("/webhook")
-//    public ResponseEntity<?> webhook(
-//            @RequestBody @Valid PagamentoNotificacaoRequest pagamentoNotificacaoRequest) {
-//        if (Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados())
-//                || Objects.isNull(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido())) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        if (Objects.isNull(pagamentoNotificacaoRequest.getAcao()) || pagamentoNotificacaoRequest.getAcao().isEmpty()) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.aprovado")) {
-//            pagamentoUseCase.realizarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido(), pedidoUseCasePort);
-//        }
-//
-//        if (pagamentoNotificacaoRequest.getAcao().toLowerCase().equals("pagamento.recusado")) {
-//            pagamentoUseCase.recuzarPagamento(pagamentoNotificacaoRequest.getPagamentoDados().getIdPedido());
-//        }
-//
-//        return ResponseEntity.ok().build();
-//    }
 }

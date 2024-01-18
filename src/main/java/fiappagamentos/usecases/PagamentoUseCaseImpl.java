@@ -36,10 +36,6 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
             pagamento = pagamentoRepositoryPort.atualizar(new Pagamento(null, idPedido, StatusPagamento.APROVADO));
         }
 
-        if (Objects.isNull(pagamento)) {
-            throw new PedidoInvalidoException();
-        }
-
         boolean pedidoAtualizado = pedidoUseCasePort.atualizarStatus(idPedido);
 
         return Objects.nonNull(pagamento) && Objects.nonNull(pedidoAtualizado) ? pagamento : null;

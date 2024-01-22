@@ -40,19 +40,19 @@ jobs:
         working-directory: caminho/para/aplicacao-de-mock
 
       - name: Aguardar Inicialização aplicação de mock
-        run: sleep 60s
+        run: sleep 30s
 
       - name: Construir com Maven
         run: mvn clean install -DskipTests
 
       - name: Executar testes
-        run: mvn spring-boot:run -Dspring.profiles.active=dev -Dpedido.service.url=${MOCK_APP_URL} &
+        run: mvn spring-boot:run "-Dspring-boot.run.profiles=dev" &
 
       - name: Aguardar Inicialização
         run: sleep 30s
 
       - name: Executar BDD
-        run: mvn test -Psystem-test -Dpedido.service.url=${MOCK_APP_URL}
+        run: mvn test -Psystem-test
 
       - name: Encerrar Aplicação
         run: pkill -f "spring-boot:run"

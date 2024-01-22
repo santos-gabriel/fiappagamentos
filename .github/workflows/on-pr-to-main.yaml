@@ -52,7 +52,7 @@ jobs:
         run: sleep 30s
 
       - name: Executar BDD
-        run: mvn test -Psystem-test
+        run: mvn test -Psystem-test -Dpedido.service.url=${MOCK_APP_URL}
 
       - name: Encerrar Aplicação
         run: pkill -f "spring-boot:run"

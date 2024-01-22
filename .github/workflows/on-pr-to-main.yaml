@@ -18,7 +18,8 @@ jobs:
       - name: Checkout do Código para Mock
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/santos-gabriel/fiap-mock.git
+          repository: santos-gabriel/fiap-mock
+          ref: main
           path: caminho/para/aplicacao-de-mock
 
       - name: Configurar JDK

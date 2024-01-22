@@ -25,16 +25,8 @@ public class StepDefinition {
 
     private UUID idPedido;
 
-    @Value("${pedido.service.url}")
-    private String teste;
-
     @Quando("realizar um pagamento")
     public PagamentoDTO realizar_um_pagamento() {
-        System.out.println("***************************teste***************************");
-        System.out.println(teste);
-
-        System.out.println("***************************teste***************************");
-
         idPedido = UUID.randomUUID();
         response = given()
                 .baseUri(BASE_URI)

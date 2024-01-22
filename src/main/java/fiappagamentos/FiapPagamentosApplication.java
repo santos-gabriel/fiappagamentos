@@ -15,8 +15,14 @@ public class FiapPagamentosApplication {
         SpringApplication.run(FiapPagamentosApplication.class, args);
     }
 
+    @Value("${pedido.service.url}")
+    private String teste;
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() {
+        System.out.println("***************************teste***************************");
+        System.out.println(teste);
+        System.out.println("***************************teste***************************");
+
         System.out.println("Application started");
     }
 

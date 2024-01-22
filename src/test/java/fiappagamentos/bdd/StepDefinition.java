@@ -32,6 +32,7 @@ public class StepDefinition {
     public PagamentoDTO realizar_um_pagamento() {
         System.out.println("***************************teste***************************");
         System.out.println(teste);
+
         System.out.println("***************************teste***************************");
 
         idPedido = UUID.randomUUID();

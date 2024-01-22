@@ -54,9 +54,7 @@ class PedidoUseCaseImplTest {
 
             var pedidoAtualizado = pedidoUseCase.atualizarStatus(UUID.randomUUID());
 
-            assertThat(pedidoAtualizado).isNotNull();
             assertThat(pedidoAtualizado).isTrue();
-
             verify(pedidoHttpPort, times(1)).atualizarStatus(any(UUID.class));
         }
 

@@ -6,9 +6,8 @@ metadata:
   labels:
     app: apl
 data:
-  DATASOURCE_INITIALIZATION_MODE: always
   DATASOURCE_INITIALIZE: 'true'
-  DATASOURCE_CONTINUE_ON_ERROR: 'true'
-  HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
-  HIBERNATE_SHOW_SQL: 'true'
   HIBERNATE_DDL_AUTO: update
+  PEDIDO_URL: http://localhost:9091/tech-challenge/pedidos
+  MONGO_URI: mongodb+srv://usertemp:xM9HCOM8vhRPSW93@fiap-cluster.2quggum.mongodb.net/?retryWrites=true&w=majority
+  MONGO_DATABASE: fiap_pagamento

@@ -3,7 +3,7 @@ name: SonarCloud Analysis
 on:
   push:
     branches:
-      - main # Ou a branch padrão do seu repositório
+      - master # Ou a branch padrão do seu repositório
 
 jobs:
   sonarcloud:

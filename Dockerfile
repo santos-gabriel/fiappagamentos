@@ -1,4 +1,4 @@
-FROM maven:3.8.5-jdk-11 AS build
+FROM maven:3.8.5-jdk-17 AS build
 COPY . /root/app/
 WORKDIR /root/app
 RUN mvn clean package

@@ -3,7 +3,7 @@ COPY . /root/app/
 WORKDIR /root/app
 RUN mvn clean package
 
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jdk-slim
 EXPOSE 9090
 COPY --from=build /root/app/ /home/app/
 WORKDIR /home/app

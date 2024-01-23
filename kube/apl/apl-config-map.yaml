@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: apl-config
+  name: apl-pagamentos-config
   labels:
-    app: apl
+    app: apl-pagamentos
 data:
   DATASOURCE_INITIALIZE: 'true'
   HIBERNATE_DDL_AUTO: update

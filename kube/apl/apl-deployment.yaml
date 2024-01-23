@@ -17,39 +17,34 @@ spec:
     spec:
       containers:
         - name: apl
-          image: plobon/apl-back:v3
+          image: fiappagamentos/fiappagamentos:v1
           imagePullPolicy: "Always"
           env:
-            - name: spring.jpa.properties.hibernate.dialect
-              valueFrom: 
-                configMapKeyRef:
-                  name: apl-config
-                  key: HIBERNATE_DIALECT
-            - name: spring.jpa.hibernate.show-sql
-              valueFrom: 
-                configMapKeyRef:
-                  name: apl-config
-                  key: HIBERNATE_SHOW_SQL
-            - name: spring.datasource.initialization-mode
-              valueFrom: 
-                configMapKeyRef:
-                  name: apl-config
-                  key: DATASOURCE_INITIALIZATION_MODE
             - name: spring.datasource.initialize
               valueFrom: 
                 configMapKeyRef:
                   name: apl-config
                   key: DATASOURCE_INITIALIZE
-            - name: spring.datasource.continue-on-error
-              valueFrom: 
-                configMapKeyRef:
-                  name: apl-config
-                  key: DATASOURCE_CONTINUE_ON_ERROR
             - name: spring.jpa.hibernate.ddl-auto
               valueFrom: 
                 configMapKeyRef:
                   name: apl-config
                   key: HIBERNATE_DDL_AUTO
+            - name: pedido.service.url
+              valueFrom:
+                configMapKeyRef:
+                  name: apl-config
+                  key: PEDIDO_URL
+            - name: spring.data.mongodb.uri
+              valueFrom:
+                configMapKeyRef:
+                  name: apl-config
+                  key: MONGO_URI
+            - name: spring.data.mongodb.database
+              valueFrom:
+                configMapKeyRef:
+                  name: apl-config
+                  key: MONGO_DATABASE
             - name: server.port
               value: '9090'
           ports:

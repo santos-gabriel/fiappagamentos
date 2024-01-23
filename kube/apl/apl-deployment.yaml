@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: apl
-          image: fiappagamentos/fiappagamentos:v1
+          image: dossantosgabriel/fiappagamentos:v1
           imagePullPolicy: "Always"
           env:
             - name: spring.datasource.initialize

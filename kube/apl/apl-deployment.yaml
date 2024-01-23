@@ -2,48 +2,48 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apl
+  name: apl-fila
 spec:
   selector:
     matchLabels:
-      app: apl
+      app: apl-fila
   replicas: 1
   template:
     metadata:
 #      annotations:
 #        eks.amazonaws.com/role-arn: arn:aws:iam::231670762225:role/my-app-service-account
       labels:
-        app: apl
+        app: apl-fila
     spec:
       containers:
-        - name: apl
+        - name: apl-fila
           image: dossantosgabriel/fiappagamentos:v1
           imagePullPolicy: "Always"
           env:
             - name: spring.datasource.initialize
               valueFrom: 
                 configMapKeyRef:
-                  name: apl-config
+                  name: apl-fila-config
                   key: DATASOURCE_INITIALIZE
             - name: spring.jpa.hibernate.ddl-auto
               valueFrom: 
                 configMapKeyRef:
-                  name: apl-config
+                  name: apl-fila-config
                   key: HIBERNATE_DDL_AUTO
             - name: pedido.service.url
               valueFrom:
                 configMapKeyRef:
-                  name: apl-config
+                  name: apl-fila-config
                   key: PEDIDO_URL
             - name: spring.data.mongodb.uri
               valueFrom:
                 configMapKeyRef:
-                  name: apl-config
+                  name: apl-fila-config
                   key: MONGO_URI
             - name: spring.data.mongodb.database
               valueFrom:
                 configMapKeyRef:
-                  name: apl-config
+                  name: apl-fila-config
                   key: MONGO_DATABASE
             - name: server.port
               value: '9090'

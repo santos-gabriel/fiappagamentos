@@ -3,6 +3,7 @@ package fiappagamentos.usecases;
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
+import fiappagamentos.interfaces.gateways.IPagamentoQueuePortOUT;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import fiappagamentos.util.PagamentoHelper;
 import fiappagamentos.utils.enums.StatusPagamento;
@@ -32,6 +33,8 @@ class PagamentoUseCaseImplTest {
 
     @Mock
     private IPagamentoRepositoryPort pagamentoRepositoryPort;
+    @Mock
+    private IPagamentoQueuePortOUT pagamentoQueuePortOUT;
 
     @Mock
     private IPedidoUseCasePort pedidoUseCasePort;
@@ -41,7 +44,7 @@ class PagamentoUseCaseImplTest {
     @BeforeEach
     void setup() {
         mock = MockitoAnnotations.openMocks(this);
-        pagamentoUseCase = new PagamentoUseCaseImpl(pagamentoRepositoryPort);
+        pagamentoUseCase = new PagamentoUseCaseImpl(pagamentoRepositoryPort, pagamentoQueuePortOUT);
     }
 
     @AfterEach

@@ -1,6 +1,7 @@
 package fiappagamentos.facade;
 
 import fiappagamentos.gateways.PagamentoRepositoryAdapter;
+import fiappagamentos.interfaces.gateways.IPagamentoQueuePortOUT;
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
 import fiappagamentos.interfaces.gateways.IPedidoHttpPort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
@@ -27,6 +28,8 @@ class ConfigurationContextTest {
     @Mock
     private IPagamentoRepositoryPort pagamentoRepositoryPort;
     @Mock
+    private IPagamentoQueuePortOUT pagamentoQueuePortOUT;
+    @Mock
     private IPedidoHttpPort pedidoHttpPort;
 
     AutoCloseable mock;
@@ -43,7 +46,7 @@ class ConfigurationContextTest {
 
     @Test
     void deveConfigurarPagamentoUseCase() {
-        var pagamentoUseCase = config.pagamentoUseCase(pagamentoRepositoryPort);
+        var pagamentoUseCase = config.pagamentoUseCase(pagamentoRepositoryPort, pagamentoQueuePortOUT);
         assertThat(pagamentoUseCase).isNotNull();
         assertThat(pagamentoUseCase).isInstanceOf(IPagamentoUseCasePort.class);
     }

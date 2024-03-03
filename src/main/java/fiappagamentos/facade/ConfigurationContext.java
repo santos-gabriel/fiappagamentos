@@ -1,5 +1,6 @@
 package fiappagamentos.facade;
 
+import fiappagamentos.interfaces.gateways.IPagamentoQueuePortOUT;
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
 import fiappagamentos.interfaces.gateways.IPedidoHttpPort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
@@ -13,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigurationContext {
 
     @Bean
-    public IPagamentoUseCasePort pagamentoUseCase(IPagamentoRepositoryPort pagamentoRepositoryPort) {
-        return new PagamentoUseCaseImpl(pagamentoRepositoryPort);
+    public IPagamentoUseCasePort pagamentoUseCase(IPagamentoRepositoryPort pagamentoRepositoryPort, IPagamentoQueuePortOUT pagamentoQueuePortOUT) {
+        return new PagamentoUseCaseImpl(pagamentoRepositoryPort, pagamentoQueuePortOUT);
     }
 
     @Bean

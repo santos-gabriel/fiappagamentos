@@ -3,6 +3,8 @@ package fiappagamentos.usecases;
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
+import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
+import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import fiappagamentos.util.PagamentoHelper;
 import fiappagamentos.utils.enums.StatusPagamento;
@@ -35,6 +37,10 @@ class PagamentoUseCaseImplTest {
 
     @Mock
     private IPedidoUseCasePort pedidoUseCasePort;
+    @Mock
+    private IAtualizaPedidoQueuePort atualizaPedidoQueuePort;
+    @Mock
+    private INotificaClienteQueuePort notificaClienteQueuePort;
 
     AutoCloseable mock;
 
@@ -61,7 +67,7 @@ class PagamentoUseCaseImplTest {
             when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.of(pagamento));
             when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
 
-            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), pedidoUseCasePort);
+            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), atualizaPedidoQueuePort, notificaClienteQueuePort);
 
             assertThat(pagamentoRealizado).isNotNull();
             assertThat(pagamentoRealizado.getStatusPagamento()).isEqualTo(StatusPagamento.APROVADO);
@@ -80,7 +86,7 @@ class PagamentoUseCaseImplTest {
             when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
             when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
 
-            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), pedidoUseCasePort);
+            var pagamentoRealizado = pagamentoUseCase.realizarPagamento(UUID.randomUUID(), atualizaPedidoQueuePort, notificaClienteQueuePort);
 
             assertThat(pagamentoRealizado).isNotNull();
             assertThat(pagamentoRealizado.getStatusPagamento()).isEqualTo(StatusPagamento.APROVADO);
@@ -93,7 +99,7 @@ class PagamentoUseCaseImplTest {
         @Severity(SeverityLevel.CRITICAL)
         @Description("Gerar uma excecao ao realizar um pagamento quando o id do pedido for nulo")
         void deveGerarExcecao_QuandoRealizarPagamento_IdPedidoNulo() {
-            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(null, pedidoUseCasePort))
+            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(null, atualizaPedidoQueuePort, notificaClienteQueuePort))
                     .isInstanceOf(PedidoInvalidoException.class)
                     .hasMessage("Pedido inválido");
 
@@ -106,7 +112,7 @@ class PagamentoUseCaseImplTest {
         @Severity(SeverityLevel.CRITICAL)
         @Description("Gerar uma excecao ao realizar um pagamento quando a dependencia de usecase para pedido nao for informada")
         void deveGerarExcecao_QuandoRealizarPagamento_PedidoUseCaseNulo() {
-            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(UUID.randomUUID(), null))
+            assertThatThrownBy(() -> pagamentoUseCase.realizarPagamento(UUID.randomUUID(), atualizaPedidoQueuePort, notificaClienteQueuePort))
                     .isInstanceOf(PedidoUseCaseInvalidoException.class)
                     .hasMessage("Dependencia usecase de pedido invalida");
 
@@ -126,7 +132,7 @@ class PagamentoUseCaseImplTest {
             when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.of(pagamento));
             when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
 
-            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID());
+            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID(), atualizaPedidoQueuePort, notificaClienteQueuePort);
 
             assertThat(pagamentoRecusado).isNotNull();
             assertThat(pagamentoRecusado).isEqualTo(pagamento);
@@ -144,7 +150,7 @@ class PagamentoUseCaseImplTest {
             when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
             when(pagamentoRepositoryPort.atualizar(any(Pagamento.class))).thenReturn(pagamento);
 
-            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID());
+            var pagamentoRecusado = pagamentoUseCase.recuzarPagamento(UUID.randomUUID(), atualizaPedidoQueuePort, notificaClienteQueuePort);
 
             assertThat(pagamentoRecusado).isNotNull();
             assertThat(pagamentoRecusado.getStatusPagamento()).isEqualTo(StatusPagamento.RECUSADO);
@@ -159,7 +165,7 @@ class PagamentoUseCaseImplTest {
         void deveRecusarPagamento_IdPedidoNaoInformado() {
             when(pagamentoRepositoryPort.localizarPorPedido(any(UUID.class))).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> pagamentoUseCase.recuzarPagamento(null))
+            assertThatThrownBy(() -> pagamentoUseCase.recuzarPagamento(null, atualizaPedidoQueuePort, notificaClienteQueuePort))
                     .isInstanceOf(PedidoInvalidoException.class).hasMessage("Pedido inválido");
 
             verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));

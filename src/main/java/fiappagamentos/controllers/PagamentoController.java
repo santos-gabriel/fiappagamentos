@@ -2,6 +2,8 @@ package fiappagamentos.controllers;
 
 import fiappagamentos.entities.Pagamento;
 import fiappagamentos.adapters.PagamentoDTO;
+import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
+import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
 import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +20,12 @@ import java.util.UUID;
 public class PagamentoController {
 
     private final IPagamentoUseCasePort pagamentoUseCase;
-    private final IPedidoUseCasePort pedidoUseCasePort;
+    private final IAtualizaPedidoQueuePort atualizaPedidoQueuePort;
+    private final INotificaClienteQueuePort notificaClienteQueuePort;
 
     @PostMapping("/{idPedido}")
     public ResponseEntity<?> realizaPagamento(@PathVariable(name = "idPedido", required = true) UUID idPedido) {
-        Pagamento res = pagamentoUseCase.realizarPagamento(idPedido, pedidoUseCasePort);
+        Pagamento res = pagamentoUseCase.realizarPagamento(idPedido, atualizaPedidoQueuePort, notificaClienteQueuePort);
 
         if (Objects.isNull(res)) {
             return ResponseEntity.internalServerError().build();

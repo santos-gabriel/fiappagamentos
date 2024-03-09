@@ -4,7 +4,6 @@ import fiappagamentos.adapters.PagamentoDTO;
 import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
 import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
-import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -20,7 +19,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;

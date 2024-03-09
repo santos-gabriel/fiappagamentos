@@ -5,8 +5,6 @@ import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
 import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
 import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
-import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
-import fiappagamentos.util.PagamentoHelper;
 import fiappagamentos.utils.enums.StatusPagamento;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
@@ -21,7 +19,6 @@ import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,8 +32,6 @@ class PagamentoUseCaseImplTest {
     @Mock
     private IPagamentoRepositoryPort pagamentoRepositoryPort;
 
-    @Mock
-    private IPedidoUseCasePort pedidoUseCasePort;
     @Mock
     private IAtualizaPedidoQueuePort atualizaPedidoQueuePort;
     @Mock
@@ -105,7 +100,8 @@ class PagamentoUseCaseImplTest {
 
             verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));
             verify(pagamentoRepositoryPort, never()).atualizar(any(Pagamento.class));
-            verify(pedidoUseCasePort, never()).atualizarStatus(any(UUID.class));
+            verify(notificaClienteQueuePort, never()).publish(any(String.class));
+            verify(atualizaPedidoQueuePort, never()).publish(any(String.class));
         }
 
         @Test
@@ -118,7 +114,8 @@ class PagamentoUseCaseImplTest {
 
             verify(pagamentoRepositoryPort, never()).localizarPorPedido(any(UUID.class));
             verify(pagamentoRepositoryPort, never()).atualizar(any(Pagamento.class));
-            verify(pedidoUseCasePort, never()).atualizarStatus(any(UUID.class));
+            verify(notificaClienteQueuePort, never()).publish(any(String.class));
+            verify(atualizaPedidoQueuePort, never()).publish(any(String.class));
         }
     }
 

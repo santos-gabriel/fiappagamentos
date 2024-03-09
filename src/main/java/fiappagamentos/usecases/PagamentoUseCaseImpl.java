@@ -8,11 +8,9 @@ import fiappagamentos.utils.enums.StatusPagamento;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
-import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +43,7 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
     }
 
     @Override
+    @Transactional
     public Pagamento recuzarPagamento(UUID idPedido, IAtualizaPedidoQueuePort atualizaPedidoQueuePort, INotificaClienteQueuePort notificaClienteQueuePort) throws PedidoInvalidoException {
         if (Objects.isNull(idPedido)) {
             throw new PedidoInvalidoException();

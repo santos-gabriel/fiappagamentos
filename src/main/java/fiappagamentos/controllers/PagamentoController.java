@@ -5,7 +5,6 @@ import fiappagamentos.adapters.PagamentoDTO;
 import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
 import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
-import fiappagamentos.interfaces.usecases.IPedidoUseCasePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

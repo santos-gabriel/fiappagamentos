@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: apl-pagamentos
-          image: dossantosgabriel/fiappagamentos:v1
+          image: dossantosgabriel/fiappagamentos:v2
           imagePullPolicy: "Always"
           env:
             - name: spring.datasource.initialize
@@ -45,6 +45,16 @@ spec:
                 configMapKeyRef:
                   name: apl-pagamentos-config
                   key: MONGO_DATABASE
+            - name: queue.notifica.cliente
+              valueFrom:
+                configMapKeyRef:
+                  name: apl-pagamentos-config
+                  key: QUEUE_NOTIFICA_CLIENTE
+            - name: queue.atualiza.pedido
+              valueFrom:
+                configMapKeyRef:
+                  name: apl-pagamentos-config
+                  key: QUEUE_ATUALIZA_PEDIDO
             - name: server.port
               value: '9090'
           ports:

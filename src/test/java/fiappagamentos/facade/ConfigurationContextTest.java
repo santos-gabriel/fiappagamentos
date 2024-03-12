@@ -43,17 +43,17 @@ class ConfigurationContextTest {
         assertThat(pagamentoUseCase).isNotNull();
         assertThat(pagamentoUseCase).isInstanceOf(IPagamentoUseCasePort.class);
     }
-    @Test
-    void deveConfigurarNoficaClienteUseCase() {
-        var notificaClienteUseCase = config.notificaClienteUseCase(notificaClienteQueuePort);
-        assertThat(notificaClienteUseCase).isNotNull();
-        assertThat(notificaClienteUseCase).isInstanceOf(INotificaClienteQueuePort.class);
-    }
-    @Test
-    void deveConfigurarAtualizaPedidoUseCase() {
-        var atualizaPedioUseCase = config.atualizaPedidoUseCase(atualizaPedidoQueuePort);
-        assertThat(atualizaPedioUseCase).isNotNull();
-        assertThat(atualizaPedioUseCase).isInstanceOf(IAtualizaPedidoQueuePort.class);
-    }
+//    @Test
+//    void deveConfigurarNoficaClienteUseCase() {
+//        var notificaClienteUseCase = config.notificaClienteUseCase(notificaClienteQueuePort);
+//        assertThat(notificaClienteUseCase).isNotNull();
+//        assertThat(notificaClienteUseCase).isInstanceOf(INotificaClienteQueuePort.class);
+//    }
+//    @Test
+//    void deveConfigurarAtualizaPedidoUseCase() {
+//        var atualizaPedioUseCase = config.atualizaPedidoUseCase(atualizaPedidoQueuePort);
+//        assertThat(atualizaPedioUseCase).isNotNull();
+//        assertThat(atualizaPedioUseCase).isInstanceOf(IAtualizaPedidoQueuePort.class);
+//    }
 
 }

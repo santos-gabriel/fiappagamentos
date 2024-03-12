@@ -4,6 +4,8 @@ import fiappagamentos.entities.Pagamento;
 import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
 import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
 import fiappagamentos.interfaces.gateways.IPagamentoRepositoryPort;
+import fiappagamentos.interfaces.usecases.IAtualizaPedidoUseCasePort;
+import fiappagamentos.interfaces.usecases.INotificaClienteUseCasePort;
 import fiappagamentos.utils.enums.StatusPagamento;
 import fiappagamentos.exceptions.entities.PedidoInvalidoException;
 import fiappagamentos.exceptions.entities.PedidoUseCaseInvalidoException;
@@ -21,7 +23,7 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
     private final IPagamentoRepositoryPort pagamentoRepositoryPort;
     @Override
     @Transactional
-    public Pagamento realizarPagamento(UUID idPedido, IAtualizaPedidoQueuePort atualizaPedidoQueuePort, INotificaClienteQueuePort notificaClienteQueuePort)
+    public Pagamento realizarPagamento(UUID idPedido, IAtualizaPedidoUseCasePort atualizaPedidoUseCasePort, INotificaClienteUseCasePort notificaClienteUseCasePort)
             throws PedidoInvalidoException, PedidoUseCaseInvalidoException {
         if (Objects.isNull(idPedido)) {
             throw new PedidoInvalidoException();
@@ -36,15 +38,15 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
             pagamento = pagamentoRepositoryPort.atualizar(new Pagamento(null, idPedido, StatusPagamento.APROVADO));
         }
 
-        atualizaPedidoQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.APROVADO.getDescricao()));
-        notificaClienteQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.APROVADO.getDescricao()));
+        atualizaPedidoUseCasePort.atualizaPedido(idPedido);
+        notificaClienteUseCasePort.notificaCliente(idPedido);
 
         return Objects.nonNull(pagamento) ? pagamento : null;
     }
 
     @Override
     @Transactional
-    public Pagamento recuzarPagamento(UUID idPedido, IAtualizaPedidoQueuePort atualizaPedidoQueuePort, INotificaClienteQueuePort notificaClienteQueuePort) throws PedidoInvalidoException {
+    public Pagamento recuzarPagamento(UUID idPedido, IAtualizaPedidoUseCasePort atualizaPedidoUseCasePort, INotificaClienteUseCasePort notificaClienteUseCasePort) throws PedidoInvalidoException {
         if (Objects.isNull(idPedido)) {
             throw new PedidoInvalidoException();
         }
@@ -52,28 +54,21 @@ public class PagamentoUseCaseImpl implements IPagamentoUseCasePort {
         if (pagamentoDB.isPresent()) {
             pagamentoDB.get().setStatusPagamento(StatusPagamento.RECUSADO);
             Pagamento pagamento = pagamentoRepositoryPort.atualizar(pagamentoDB.get());
-            atualizaPedidoQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.RECUSADO.getDescricao()));
-            notificaClienteQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.RECUSADO.getDescricao()));
+            atualizaPedidoUseCasePort.atualizaPedido(idPedido);
+            notificaClienteUseCasePort.notificaCliente(idPedido);
             return pagamento;
         }
 
         Pagamento pagamento = pagamentoRepositoryPort
                 .atualizar(new Pagamento(null, idPedido, StatusPagamento.RECUSADO));
-        atualizaPedidoQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.RECUSADO.getDescricao()));
-        notificaClienteQueuePort.publish(pedidoToJson(idPedido, StatusPagamento.RECUSADO.getDescricao()));
+        atualizaPedidoUseCasePort.atualizaPedido(idPedido);
+        notificaClienteUseCasePort.notificaCliente(idPedido);
         return pagamento;
     }
 
     @Override
     public Optional<Pagamento> localizarPorPedido(UUID idPedido) {
         return pagamentoRepositoryPort.localizarPorPedido(idPedido);
-    }
-
-    public String pedidoToJson(UUID idPedido, String status) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{'idPedido': '"+idPedido+"', ");
-        sb.append("'statusPagamento': '"+status+"'}");
-        return sb.toString();
     }
 
 }

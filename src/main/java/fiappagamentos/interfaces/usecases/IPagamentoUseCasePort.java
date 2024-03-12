@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IPagamentoUseCasePort {
-    Pagamento realizarPagamento(UUID idPedido, IAtualizaPedidoQueuePort atualizaPedidoQueuePort, INotificaClienteQueuePort notificaClienteQueuePort) throws PedidoInvalidoException;
-    Pagamento recuzarPagamento(UUID idPedido, IAtualizaPedidoQueuePort atualizaPedidoQueuePort, INotificaClienteQueuePort notificaClienteQueuePort) throws PedidoInvalidoException;
+    Pagamento realizarPagamento(UUID idPedido, IAtualizaPedidoUseCasePort atualizaPedidoUseCasePort, INotificaClienteUseCasePort notificaClienteUseCasePort) throws PedidoInvalidoException;
+    Pagamento recuzarPagamento(UUID idPedido, IAtualizaPedidoUseCasePort atualizaPedidoUseCasePort, INotificaClienteUseCasePort notificaClienteUseCasePort) throws PedidoInvalidoException;
     Optional<Pagamento> localizarPorPedido(UUID idPedido);
 }

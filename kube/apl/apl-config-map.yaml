@@ -11,3 +11,5 @@ data:
   PEDIDO_URL: http://localhost:9091/tech-challenge/pedidos
   MONGO_URI: mongodb+srv://usertemp:xM9HCOM8vhRPSW93@fiap-cluster.2quggum.mongodb.net/?retryWrites=true&w=majority
   MONGO_DATABASE: fiap_pagamento
+  QUEUE_NOTIFICA_CLIENTE: notifica_cliente
+  QUEUE_ATUALIZA_PEDIDO: atualiza_pedido

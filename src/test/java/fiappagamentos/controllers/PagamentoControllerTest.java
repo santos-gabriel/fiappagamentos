@@ -3,6 +3,8 @@ package fiappagamentos.controllers;
 import fiappagamentos.adapters.PagamentoDTO;
 import fiappagamentos.interfaces.gateways.IAtualizaPedidoQueuePort;
 import fiappagamentos.interfaces.gateways.INotificaClienteQueuePort;
+import fiappagamentos.interfaces.usecases.IAtualizaPedidoUseCasePort;
+import fiappagamentos.interfaces.usecases.INotificaClienteUseCasePort;
 import fiappagamentos.interfaces.usecases.IPagamentoUseCasePort;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
@@ -33,16 +35,16 @@ class PagamentoControllerTest {
     @Mock
     private IPagamentoUseCasePort pagamentoUseCase;
     @Mock
-    private IAtualizaPedidoQueuePort pedidoQueuePort;
+    private IAtualizaPedidoUseCasePort atualizaPedidoUseCasePort;
     @Mock
-    private INotificaClienteQueuePort notificaClienteQueuePort;
+    private INotificaClienteUseCasePort notificaClienteUseCasePort;
 
     AutoCloseable mock;
 
     @BeforeEach
     void setup() {
         mock = MockitoAnnotations.openMocks(this);
-        PagamentoController pagamentoController = new PagamentoController(pagamentoUseCase, pedidoQueuePort, notificaClienteQueuePort);
+        PagamentoController pagamentoController = new PagamentoController(pagamentoUseCase, atualizaPedidoUseCasePort, notificaClienteUseCasePort);
         mockMvc = MockMvcBuilders.standaloneSetup(pagamentoController).addFilter((request, response, chain) -> {
             response.setCharacterEncoding("UTF-8");
             chain.doFilter(request, response);
@@ -61,24 +63,24 @@ class PagamentoControllerTest {
         @Description("Realizar pagamento")
         void deveRealizarPagamento() throws Exception {
             var pagamento = gerarPagamento();
-            when(pagamentoUseCase.realizarPagamento(any(UUID.class), any(IAtualizaPedidoQueuePort.class), any(INotificaClienteQueuePort.class))).thenReturn(pagamento);
+            when(pagamentoUseCase.realizarPagamento(any(UUID.class), any(IAtualizaPedidoUseCasePort.class), any(INotificaClienteUseCasePort.class))).thenReturn(pagamento);
 
             mockMvc.perform(post("/{idPedido}", UUID.randomUUID()))
                     .andExpect(status().isOk());
 
-            verify(pagamentoUseCase, times(1)).realizarPagamento(any(UUID.class),any(IAtualizaPedidoQueuePort.class), any(INotificaClienteQueuePort.class));
+            verify(pagamentoUseCase, times(1)).realizarPagamento(any(UUID.class),any(IAtualizaPedidoUseCasePort.class), any(INotificaClienteUseCasePort.class));
         }
         @Test
         @Severity(SeverityLevel.CRITICAL)
         @Description("Gerar excecao ao realizar pagamento, pedido nulo")
         void deveGerarExcecao_QuandoRealizarPagamento_PedidoNulo() throws Exception {
             var pagamento = gerarPagamento();
-            when(pagamentoUseCase.realizarPagamento(any(UUID.class), any(IAtualizaPedidoQueuePort.class), any(INotificaClienteQueuePort.class))).thenReturn(null);
+            when(pagamentoUseCase.realizarPagamento(any(UUID.class), any(IAtualizaPedidoUseCasePort.class), any(INotificaClienteUseCasePort.class))).thenReturn(null);
 
             mockMvc.perform(post("/{idPedido}", UUID.randomUUID()))
                     .andExpect(status().isInternalServerError());
 
-            verify(pagamentoUseCase, times(1)).realizarPagamento(any(UUID.class),any(IAtualizaPedidoQueuePort.class), any(INotificaClienteQueuePort.class));
+            verify(pagamentoUseCase, times(1)).realizarPagamento(any(UUID.class),any(IAtualizaPedidoUseCasePort.class), any(INotificaClienteUseCasePort.class));
         }
     }
 
